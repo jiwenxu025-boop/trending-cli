@@ -152,7 +152,7 @@ async def fetch_reddit(n: int = 15) -> list[Item]:
             Item(
                 "Reddit", i, title, url,
                 desc=f"r/{sub}",
-                heat=f"👍 {score}",
+                heat=f"[+1] {score}",
                 extra=f"[yellow]r/{sub}[/yellow]",
             )
         )
@@ -195,7 +195,7 @@ async def fetch_hackernews(n: int = 15) -> list[Item]:
             Item(
                 "HackerNews", i, title, url,
                 desc=f"by {by}" if by else "",
-                heat=f"⬆ {score}",
+                heat=f"[^] {score}",
                 extra="[cyan]news.ycombinator.com[/cyan]",
             )
         )
@@ -224,7 +224,7 @@ async def fetch_v2ex(n: int = 15) -> list[Item]:
             Item(
                 "V2EX", i, title, url,
                 desc=f"{member} · {node}",
-                heat=f"💬 {replies}",
+                heat=f"[R] {replies}",
                 extra=f"[blue]{node}[/blue]" if node else "",
             )
         )
@@ -257,7 +257,7 @@ async def fetch_weibo(n: int = 15) -> list[Item]:
         url = f"https://s.weibo.com/weibo?q={word}"
         heat_val = entry.get("num", "")
         if heat_val:
-            heat_val = f"🔥 {heat_val}"
+            heat_val = f"[H] {heat_val}"
         # 有些词条带话题标签，保留原始词条名
         items.append(
             Item(
@@ -296,7 +296,7 @@ async def fetch_zhihu(n: int = 15) -> list[Item]:
             Item(
                 "知乎日报", i, title, url,
                 desc=desc,
-                heat="📰",
+                heat="[News]",
                 extra="[cyan]daily.zhihu.com[/cyan]",
             )
         )
@@ -357,12 +357,12 @@ def build_display(
     # ── 分栏策略：宽终端两列，窄终端单列 ──
     two_col = width >= 110
     sources_map = {
-        "g": ("GitHub", github, "⭐", "green"),
-        "r": ("Reddit", reddit, "🤖", "magenta"),
-        "z": ("知乎日报", zhihu, "💡", "cyan"),
-        "h": ("HackerNews", hackernews, "🧠", "yellow"),
-        "v": ("V2EX", v2ex, "💬", "blue"),
-        "w": ("微博", weibo, "🔥", "red"),
+        "g": ("GitHub", github, "[star]", "green"),
+        "r": ("Reddit", reddit, "[R]", "magenta"),
+        "z": ("\u77e5\u4e4e\u65e5\u62a5", zhihu, "[Zh]", "cyan"),
+        "h": ("HackerNews", hackernews, "[HN]", "yellow"),
+        "v": ("V2EX", v2ex, "[V]", "blue"),
+        "w": ("\u5fae\u535a", weibo, "[Wb]", "red"),
     }
     keys = list(sources_map.keys()) if mode == "a" else [m for m in mode if m in sources_map]
     if not keys:
@@ -391,7 +391,7 @@ def build_display(
 
     return Panel(
         Group(content, Text(""), footer),
-        title="[bold]🌐 热榜聚合[/bold]",
+        title="[bold][Net] 热榜聚合[/bold]",
         border_style="bright_white",
         subtitle=f" {len(github)+len(reddit)+len(hackernews)+len(v2ex)+len(weibo)+len(zhihu)} 条 · {ts} ",
         padding=(1, 2),
@@ -537,7 +537,7 @@ async def main_async_unix() -> None:
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
         # 恢复终端
-        console.print("\n[green]👋 下次见！[/green]")
+        console.print("\n[green]Bye 下次见！[/green]")
 
 
 # ── Windows 版本（简化，用 input 轮询）────────────────────────────
@@ -617,7 +617,7 @@ async def main_async_win() -> None:
             )
             await asyncio.sleep(1)
 
-    console.print("\n[green]👋 下次见！[/green]")
+    console.print("\n[green]Bye 下次见！[/green]")
 
 
 if __name__ == "__main__":
